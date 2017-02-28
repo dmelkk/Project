@@ -4,11 +4,11 @@ from flask_mail import Message
 from app import mail
 
 
-"""
+
 @async
 def send_async_email(msg):
     mail.send(msg)
-"""
+
 
 def send_email(subject, recipients, template, **kwargs):
     app = current_app._get_current_object()

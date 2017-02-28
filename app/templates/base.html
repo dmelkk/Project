@@ -5,7 +5,6 @@
 {% block head %}
     {{ super() }}
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-
 {% endblock head %}
 
 {% block navbar %}
@@ -25,8 +24,6 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Link</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -54,13 +51,16 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+                    <li class="dropdown-header">Signed in as <strong>{{ current_user.username }}</strong></li>
+                    <li role="separator" class="divider"></li>
                     <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
                 </ul>
             </li>
         {% else %}
-            <li><a href="{{ url_for('auth.login') }}">Log in</a></li>
+            <li><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
+            <li><a href="{{ url_for('auth.login') }}">Sing In</a></li>
         {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->
