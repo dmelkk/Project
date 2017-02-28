@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-2 float-left col-md-offset-2">
+        <img src="{{ user.gravatar(size=230) }}" class="img-rounded profile-thumbnail">
+        <div class="profile-header">
+            <h1>{{ user.username }}</h1>
+            {% if user.name or user.location %}
+            <p>
+                {% if user.name %}{{ user.name }}{% endif %}
+                {% if user.location %}
+                    From <a href="http://maps.google.com/?q={{ user.location }}">
+                        {{ user.location }}
+                    </a>
+                {% endif %}
+            </p>
+            {% endif %}
+
+            {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+            <p>
+                Member since: {{ moment(user.member_since).format('L') }}.
+                Last seen: {{ moment(user.last_seen).format('L') }}.
+            </p>
+            {% if user == current_user %}
+                <a class="btn btn-default btn-block md-3" href="{{ url_for('main.edit_profile') }}">
+                    Edit Profile
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
