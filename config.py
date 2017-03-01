@@ -5,6 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
+    ADMIN = os.environ.get('ADMIN') or 'dmelkk@gmail.com'
     DEBUG = False
     CSRF_ENABLED = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess key'

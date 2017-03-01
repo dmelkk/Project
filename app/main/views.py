@@ -2,14 +2,23 @@ from flask import flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
 
 from app import db
-from app.models import User
+from app.models import User, Permission, Post, Role
 from . import main
-from .forms import EditProfileForm
+from .forms import EditProfileForm, PostForm
 
 
-@main.route('/')
+@main.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('main/index.html')
+    form = PostForm()
+    if not current_user.is_anonymous:
+        if current_user.can(Permission.WRITE_ARTICLES) and \
+                form.validate_on_submit():
+            post = Post(body=form.body.data,
+                        author=current_user._get_current_object())
+            db.session.add(post)
+            return redirect(url_for('main.index'))
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('main/index.html', form=form, posts=posts, Permission=Permission)
 
 
 @main.route('/user/<username>')

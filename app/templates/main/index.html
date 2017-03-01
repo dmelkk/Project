@@ -1,3 +1,16 @@
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-<p>Hello, World!</p>
+{% block title %}Index{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="form-group">
+        {% if current_user.can(Permission.WRITE_ARTICLES) %}
+            {{ wtf.quick_form(form) }}
+        {% endif %}
+    </div>
+</div>
+
+{% include "_posts.html" %}
+{% endblock content %}
