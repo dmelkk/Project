@@ -1,14 +1,19 @@
-<div class="container">
-    {% for post in posts %}
+{% for post in posts %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <a href="{{ url_for('main.user', username=post.author.username) }}">
-                <img class="img-rounded profil-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+                <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
             </a>
+            <ul class="list-unstyled post-header">
+                <li><a href="{{ url_for('main.user', username=post.author.username) }}">
+                    {{ post.author.username }}
+                </a></li>
+                <li><small>{{ moment(post.timestamp).fromNow() }}</small></li>
+            </ul>
         </div>
         <div class="panel-body">
             {{ post.body }}
         </div>
     </div>
-    {% endfor %}
-</div>
+{% endfor %}
+

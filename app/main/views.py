@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, url_for
+from flask import abort, current_app, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from app import db
@@ -17,14 +17,21 @@ def index():
                         author=current_user._get_current_object())
             db.session.add(post)
             return redirect(url_for('main.index'))
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
-    return render_template('main/index.html', form=form, posts=posts, Permission=Permission)
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['POSTS_PER_PAGE'],
+        error_out=False)
+    posts = pagination.items
+    return render_template('main/index.html', form=form, posts=posts, pagination=pagination)
 
 
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first()
-    return render_template('/main/user.html', user=user)
+    if user is None:
+        abort(404)
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('/main/user.html', user=user, posts=posts)
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])

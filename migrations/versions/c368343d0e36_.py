@@ -1,14 +1,14 @@
-"""bug fix
+"""empty message
 
-Revision ID: c5007e05db1e
-Revises: b7fb0a191921
-Create Date: 2017-02-28 23:55:31.028169
+Revision ID: c368343d0e36
+Revises: 3b878114b8c6
+Create Date: 2017-03-02 01:00:54.265622
 
 """
 
 # revision identifiers, used by Alembic.
-revision = 'c5007e05db1e'
-down_revision = 'b7fb0a191921'
+revision = 'c368343d0e36'
+down_revision = '3b878114b8c6'
 
 from alembic import op
 import sqlalchemy as sa

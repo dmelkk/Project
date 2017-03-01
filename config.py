@@ -17,6 +17,7 @@ class Config(object):
     MAIL_USE_SSL = False
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'default'
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'default'
+    POSTS_PER_PAGE = 5
 
     @staticmethod
     def init_app(app):

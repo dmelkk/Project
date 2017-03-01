@@ -3,9 +3,13 @@ from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db, login_manager
 from datetime import datetime
 import hashlib
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 class Permission:
@@ -139,7 +143,4 @@ class AnonymousUser(AnonymousUserMixin):
     def is_administrator(self):
         return False
 
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+login_manager.anonymous_user = AnonymousUser

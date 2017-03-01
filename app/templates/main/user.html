@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="col-md-2 float-left col-md-offset-2">
-        <img src="{{ user.gravatar(size=230) }}" class="img-rounded profile-thumbnail">
+<div class="container">
+    <div class="col-md-2">
+        <img src="{{ user.gravatar(size=230) }}" class="img-rounded profile-thumbnail" style="width: 100%">
         <div class="profile-header">
             <h1>{{ user.username }}</h1>
             {% if user.name or user.location %}
@@ -20,6 +20,8 @@
             {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
             <p>
                 Member since: {{ moment(user.member_since).format('L') }}.
+            </p>
+            <p>
                 Last seen: {{ moment(user.last_seen).format('L') }}.
             </p>
             {% if user == current_user %}
@@ -28,6 +30,9 @@
                 </a>
             {% endif %}
         </div>
+    </div>
+    <div class="col-md-10">
+        {% include "_posts.html" %}
     </div>
 </div>
 {% endblock content %}
