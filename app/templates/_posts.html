@@ -15,11 +15,27 @@
             {{ post.body }}
         </div>
         <div class="panel-footer">
-            <a href="{{ url_for('main.post', id=post.id) }}#comments">
-                <span class="label label-primary">
-                    {{ post.comments.count() }} Comments
-                </span>
-            </a>
+            <ul class="list-inline" style="margin-bottom: 0;">
+                {% if current_user == post.author %}
+                <li style="padding: 0;"><a href="{{ url_for('main.edit', id=post.id) }}">
+                    <span class="label label-primary">Edit</span>
+                </a></li>
+                {% elif current_user.is_administrator() %}
+                <li style="padding: 0;"><a href="{{ url_for('main.edit', id=post.id) }}">
+                    <span class="label label-danger">Edit [Admin]</span>
+                </a></li>
+                {% endif %}
+                <li style="padding: 0;"><a href="{{ url_for('main.post', id=post.id) }}">
+                    <span class="label label-default">
+                        Permalink
+                    </span>
+                </a></li>
+                <li style="padding: 0;"><a href="{{ url_for('main.post', id=post.id) }}#comments">
+                    <span class="label label-primary">
+                        {{ post.comments.count() }} Comments
+                    </span>
+                </a></li>
+            </ul>
         </div>
     </div>
 {% endfor %}
