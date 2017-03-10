@@ -1,10 +1,10 @@
-from flask import abort, current_app, redirect, render_template, request, url_for
+from flask import abort, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from app import db
-from app.models import User, Permission, Post, Role
+from app.models import User, Permission, Post, Role, Comment
 from . import main
-from .forms import EditProfileForm, PostForm
+from .forms import EditProfileForm, PostForm, CommentForm
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -49,3 +49,28 @@ def edit_profile():
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
     return render_template('/main/edit_profile.html', form=form)
+
+
+@main.route('/post/<int:id>', methods=['GET', 'POST'])
+def post(id):
+    post = Post.query.get_or_404(id)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(body=form.body.data,
+                          post=post,
+                          author=current_user._get_current_object())
+        db.session.add(comment)
+        flash('Your comment has been published.')
+        return redirect(url_for('main.post', id=post.id, page=-1))
+    page = request.args.get('page', 1, type=int)
+    if page == -1:
+        page = (post.comments.count() - 1) / \
+                current_app.config['COMMENTS_PER_PAGE'] + 1
+    pagination = post.comments.order_by(Comment.timestamp.asc()).paginate(
+                        page, per_page=current_app.config['COMMENTS_PER_PAGE'],
+                        error_out=False)
+    comments = pagination.items
+    return render_template('/main/post.html', post=post, form=form,
+            comments=comments, pagination=pagination, Permission=Permission)
+
+

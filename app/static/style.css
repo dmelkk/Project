@@ -4,3 +4,8 @@
     margin-left: 5px;
     vertical-align: middle;
 }
+
+.center-align-pagination {
+    margin-left: auto;
+    margin-right: auto;
+}

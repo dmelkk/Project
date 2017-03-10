@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Post{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="media">
+        <div class="media-left">
+            <a href="{{ url_for('main.user', username=post.author.username) }}">
+                <img class="media-object img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=60) }}">
+            </a>
+        </div>
+        <div class="media-body">
+            <div class="container-fluid" style="padding-left:0;">
+                <a herf="{{url_for('main.user', username=post.author.username) }}" style="display: block; float: left;">
+                    {{ post.author.username }}</a>
+                <p style="display: block; float: right;">{{ moment(post.timestamp).fromNow() }}</p>
+            </div>
+            <p>{{ post.body }}</p>
+            <span class="label label-primary" style="float: right;">
+                {{ post.comments.count() }} Comments
+            </span>
+        </div>
+    </div>
+    <hr>
+    <div class="form-group">
+    {% if current_user.can(Permission.COMMENT) %}
+        {{ wtf.quick_form(form) }}
+    {% endif %}
+    </div>
+    <hr>
+    {% for comment in post.comments %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="{{ url_for('main.user', username=comment.author.username) }}">
+                <img class="img-rounded profile-thumbnail" src="{{ comment.author.gravatar(size=40) }}">
+            </a>
+            <ul class="list-unstyled post-header">
+                <li><a href="{{ url_for('main.user', username=comment.author.username) }}">
+                        {{ comment.author.username }}
+                </a></li>
+                <li><small>{{ moment(comment.timestamp).fromNow() }}</small></li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            {{ comment.body }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}
