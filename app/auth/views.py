@@ -69,7 +69,7 @@ def unconfirmed():
 def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.index'))
-    if curretn_user.confirm(token):
+    if current_user.confirm(token):
         flash('You have confirmed your account, Thanks!')
     else:
         flash('Your confirmation link is invalid or has expired')
