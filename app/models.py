@@ -124,6 +124,7 @@ class User(UserMixin, db.Model):
         if data.get('confirm') != self.id:
             return False
         self.confirmed = True
+        self.__init__()
         db.session.add(self)
         return True
 
