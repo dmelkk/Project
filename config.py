@@ -19,11 +19,21 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'default'
     POSTS_PER_PAGE = 5
     COMMENTS_PER_PAGE = 10
+    OAUTH_CREDENTIALS = {
+            'facebook': {
+                'id': '355973841403044',
+                'secret': '65eb9185d069bf0ffc9c8f4f06681df2'
+            },
+            'twitter': {
+                'id': 'VJgB2oIHFREftFOOm2HajuDpy',
+                'secret': ' 3aZn6gHoUrS7NV6M7R0JkHZgrk6gH6fFZ6D04pKMT3EPJznGSO'
+            }
+    }
 
     @staticmethod
     def init_app(app):
         pass
-        
+
 
 class ProductionConfig(Config):
     DEBUG = False

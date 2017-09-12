@@ -5,7 +5,7 @@ from . import auth
 from ..email import send_email
 from ..models import User
 from .. import db
-
+from .oauth import *
 
 @auth.before_app_request
 def before_request():
@@ -35,6 +35,36 @@ def logout():
     return redirect(url_for('main.index'))
 
 
+@auth.route('/<provider>')
+def oauth_authorize(provider):
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
+    oauth = OAuthSignIn.get_provider(provider)
+    return oauth.authorize()
+
+
+@auth.route('/collback/<provider>')
+def oauth_callback(provider):
+    if not current_user.is_anonymous:
+        return redircet(url_for('main.index'))
+    oauth = OAuthSignIn.get_provider(provider)
+    social_id, username, email = oauth.callback()
+    if social_id is None:
+        flash('Authentication failed.')
+        return redirect(url_for('main.index'))
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        user = User(username=username, email=email, confirmed=True)
+    if provider == 'facebook' and user.facebook_id is None:
+        user.facebook_id = social_id
+    elif provider == 'twiter' and user.twitter_id is None:
+        user.twitter_id = social_id
+    db.session.add(user)
+    db.session.commit()
+    login_user(user, True)
+    return redirect(url_for('main.index'))
+
+
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -46,7 +76,7 @@ def register():
         db.session.commit()
         token = user.generate_confirmation_token()
         send_email(
-                subject='confirm your account', 
+                subject='confirm your account',
                 recipients=[user.email],
                 template='auth/email/confirm',
                 token=token,

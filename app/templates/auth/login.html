@@ -7,6 +7,10 @@
 {% block navbar %}{% endblock navbar %}
 {% block content %}
     <div class="container">
+        <p><a href="{{ url_for('auth.oauth_authorize', provider='facebook') }}">Login with Facebook</a></p>
+        <p><a href="{{ url_for('auth.oauth_authorize', provider='twitter') }}">Login with Twitter</a></p>
+    </div>
+    <div class="container">
         <div class="page-header">
             <h1>Login</h1>
         </div>
