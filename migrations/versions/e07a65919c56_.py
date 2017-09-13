@@ -1,13 +1,13 @@
-"""initial migrate
+"""empty message
 
-Revision ID: 0c77ae559b5c
+Revision ID: e07a65919c56
 Revises: None
-Create Date: 2017-05-12 17:31:30.164783
+Create Date: 2017-09-12 16:21:13.264503
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '0c77ae559b5c'
+revision = 'e07a65919c56'
 down_revision = None
 
 from alembic import op
@@ -29,6 +29,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=64), nullable=True),
     sa.Column('username', sa.String(length=64), nullable=True),
+    sa.Column('facebook_id', sa.String(length=64), nullable=True),
+    sa.Column('twitter_id', sa.String(length=64), nullable=True),
     sa.Column('password_hash', sa.String(length=128), nullable=True),
     sa.Column('confirmed', sa.Boolean(), nullable=True),
     sa.Column('last_seen', sa.DateTime(), nullable=True),
@@ -39,7 +41,9 @@ def upgrade():
     sa.Column('member_since', sa.DateTime(), nullable=True),
     sa.Column('location', sa.String(length=128), nullable=True),
     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('facebook_id'),
+    sa.UniqueConstraint('twitter_id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
