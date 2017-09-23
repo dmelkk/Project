@@ -10,4 +10,6 @@ EXPOSE 5000
 
 ENV NAME .env
 
+
+CMD ["python", "manage.py", "db", "upgrade"]
 CMD ["python", "manage.py", "runserver"]

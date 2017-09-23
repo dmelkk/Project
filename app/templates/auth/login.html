@@ -6,18 +6,25 @@
 
 {% block navbar %}{% endblock navbar %}
 {% block content %}
-    <div class="container">
-        <div class="page-header">
-            <h1>Login</h1>
+    <div class="container"> 
+        <div class="card card-container">
+            <form class="form-signin">
+                {{ form.username(placeholder="username") }}
+                {{ form.password(placeholder="password") }}
+                <div class="checkbox">
+                    <label>
+                        {{ form.remember_me() }} Remember me
+                    </label>
+                </div>
+                {{ form.submit(class="btn btn-lg btn-primary btn-block btn-signin") }}
+                <!-- {{ wtf.quick_form(form) }} -->
+            </form>
+            <a href="#" class="forgot-password">
+                Forgot password?
+            </a>
         </div>
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
-            <p>
-                New user?
-                <a href="{{ url_for('auth.register') }}">
-                    Click here to register
-                </a>
-            </p>
-        </div>
+        <a href="{{ url_for('auth.register') }}" class="text-center register-link">
+            Click here to register
+        </a>
     </div>
 {% endblock content %}

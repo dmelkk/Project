@@ -19,7 +19,7 @@ class RegistrationForm(Form):
                                                           'Username must have only letters, '
                                                           'number, dots or underscores.')])
     password = PasswordField('Password', validators=[
-                                            DataRequired(), 
+                                            DataRequired(),
                                             EqualTo('password2', message='Password must much.')
                                         ])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
@@ -28,4 +28,8 @@ class RegistrationForm(Form):
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('Username already in use.')
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('Email already in use.')
 

@@ -41,17 +41,22 @@ def register():
     if form.validate_on_submit():
         user = User(email=form.email.data,
                     username=form.username.data,
-                    password=form.password.data)
+                    password=form.password.data,
+                    confirmed=True #remove when email sending will work
+                    )
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
+        """
+        temporary measures, because it's not working
         send_email(
-                subject='confirm your account', 
+                subject='confirm your account',
                 recipients=[user.email],
                 template='auth/email/confirm',
                 token=token,
                 user=user
                 )
+        """
         flash('A confirmation email has been sent to you by email')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)
